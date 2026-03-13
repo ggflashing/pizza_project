@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   final List<DrinkModel> drinkData = DrinkModel.getMainListJuices();
   final List<CategoryModel> categoryData = CategoryModel.getCategories();
   final List<Cakesmodel> cakesData = Cakesmodel.getMainCakesModel();
-  final List<pizzaModel> pizzaData = pizzaModel.getMainpizzaModel()
+  final List<pizzaModel> pizzaData = pizzaModel.getMainpizzaModel();
 
  // final List<TastyModel> cakesData = TastyModel.getCategories();
  // final List<PizzaModel> pizzaData = PizzaModel.getCategories();
@@ -156,15 +156,153 @@ class _HomePageState extends State<HomePage> {
               'Drive Alisa Delicious',
               style: TextStyle(fontSize: 18, color: Color(0xff1824ef)),
             ),
-            Container()
-          ],)
-        ],
+            Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(
+                color: Colors.white.withAlpha(8),
+                borderRadius: BorderRadius.circular(22.0),
+                image: const DecorationImage(image: AssetImage('assets/images/pizza_simple.jpg')),
 
-      ),
+              ),
+            )
+          ]),
 
-    )
+          const Text(
+            'Welcome \n to Drive',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 20,
+              color: Color(0xff1824ef)),
+
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _searchController,// Назначаем контроллер
+            decoration: InputDecoration(
+              hintText: 'Search all snaks...',
+              hintStyle: TextStyle(fontWeight: FontWeight.w200),
+              filled: true,
+              fillColor: Colors.white,
+              prefixIcon:
+                Icon(Icons.search,color: Colors.black,size: 25),
+              // Кнопка очистик текстового поля(серый крестик справа)
+              suffixIcon: _searchQuery.isNotEmpty
+                ? IconButton(
+                icon: Icon(Icons.clear),
+              onPressed: () {
+                  _searchController.clear();
+                  //Прослушивать будет из _preformSearch()
+
+              })
+                  :null,
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.all(Radius.circular(50.0)))),
+          )
+
+        ]
+      )
+    );
 
   }
+
+  Column categories(){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text("Categories",
+          style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600))),
+        Container(
+            height: 94,
+        margin: const EdgeInsets.all(10),
+          child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index ){
+                return GestureDetector(
+                  onTap: (){
+                    for(var item in categoryData){
+                      item.isSelected = false;}
+                    categoryData[index].isSelected = true;
+                    selectedCategoryIndex = index;
+                    //Очистим поиск при изменении категории
+                    if(_searchQuery.isNotEmpty){
+                      _searchController.clear();
+                      //Это активирует прослушиватель
+                      //Для вызова _performSearchCategory()
+                      //Который затем использует _updateListsOnCategory()
+
+                    }else{
+                      //Если поиск уже пуст просто обновится список на основе новой категории
+                      _updateListOnCategory();
+                    }
+                    setState(()  {}
+                    );
+                      //обновится виджет списка  интерфейса
+
+                  },
+
+                  child: Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: categoryData[index].isSelected
+                              ? const Color(0xff84e38c).withOpacity(0.9)
+                              : const Color(0xffe4addf).withOpacity(0.22),
+                          offset: const Offset(0, 4),
+                          blurRadius: 35)
+                      ],
+                      color: categoryData[index].isSelected
+                        ? const Color(0xff84e38c)
+                          :Colors.white,
+                    ),
+                    child: Image(
+                        image:AssetImage(categoryData[index].vector),
+                      height: 40,
+                      width: 40,
+                      fit: BoxFit.scaleDown,
+                    )),
+
+                );
+              },
+            separatorBuilder: (context,index) => const SizedBox(width: 25),
+            itemCount: categoryData.length))
+
+      ],
+    );
+  }
+  //ListView.separated в виджете snacks()
+//должен формировать свои элементы на основе листа itemsToDisplay
+Widget snacks(){
+    //Показывать сообщение если результыт не найдены
+  if(itemsToDisplay.isEmpty){
+    return Center(
+      child: Padding(
+          padding: const EdgeInsets.all(16.0),
+        child: Text(
+          _searchQuery.isNotEmpty
+              ?'No results founds for "$_searchQuery"'
+              :'No items in this category yet',
+          style: TextStyle(fontSize: 18),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+
+  return ListView.separated(
+      shrinkWrap: true,
+
+
+
+}
+
+
 
 
 
