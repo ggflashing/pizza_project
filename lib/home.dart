@@ -1,10 +1,11 @@
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:pizza_project/LocalData/models/CakesModel.dart';
 import 'package:pizza_project/LocalData/models/burgerModel.dart';
 import 'package:pizza_project/LocalData/models/category.dart';
 import 'package:pizza_project/LocalData/models/drinkModel.dart';
 import 'package:pizza_project/LocalData/models/pizzaModel.dart';
+import 'package:pizza_project/LocalData/pages/details.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -124,10 +125,10 @@ class _HomePageState extends State<HomePage> {
         height: 1800,
         child: Scaffold(
           body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               header(),
-              category(),
+              categories(),
               snacks()
           ],
 
@@ -278,16 +279,16 @@ class _HomePageState extends State<HomePage> {
   }
   //ListView.separated в виджете snacks()
 //должен формировать свои элементы на основе листа itemsToDisplay
-Widget snacks(){
-    //Показывать сообщение если результыт не найдены
-  if(itemsToDisplay.isEmpty){
+Widget snacks() {
+  //Показывать сообщение если результыт не найдены
+  if (itemsToDisplay.isEmpty) {
     return Center(
       child: Padding(
-          padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Text(
           _searchQuery.isNotEmpty
-              ?'No results founds for "$_searchQuery"'
-              :'No items in this category yet',
+              ? 'No results founds for "$_searchQuery"'
+              : 'No items in this category yet',
           style: TextStyle(fontSize: 18),
           textAlign: TextAlign.center,
         ),
@@ -297,13 +298,129 @@ Widget snacks(){
 
   return ListView.separated(
       shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      itemBuilder: (context, index) {
+        dynamic universalModel = itemsToDisplay[index];
+        String name = '';
+        String imagePath = '';
+        Color itemColorBox = Colors.grey; // Цвет по умолчанию
+        List<String> itemSpeciesLevel = [];
+        double itemPrice = 0.0;
+
+        if (universalModel is Burgermodel) {
+          name = universalModel.name;
+          imagePath = universalModel.image;
+          itemColorBox = universalModel.colorbox;
+          itemSpeciesLevel = universalModel.speciesLevel;
+          itemPrice = universalModel.price;
+        } else if (universalModel is Cakesmodel) {
+          name = universalModel.name;
+          imagePath = universalModel.image;
+          itemColorBox = universalModel.colorbox;
+          itemSpeciesLevel = universalModel.speciesLevel;
+          itemPrice = universalModel.price;
+        } else if (universalModel is DrinkModel) {
+          name = universalModel.d_name;
+          imagePath = universalModel.image;
+          itemColorBox = Colors.grey;
+          itemSpeciesLevel = ['', '', ''];
+          itemPrice = universalModel.price;
+        }
+
+        return GestureDetector(
+          onTap: (){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DetailPage(
+                      snackModel: itemsToDisplay[index],
+                    )
+                ),
+            );
+          },
+
+          child: Container(
+            height: 109,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(22),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: const  Color(0xff2f4f73).withOpacity(0.22),
+                  offset: const Offset(0, 4),
+                  blurRadius: 20)
+              ]),
+            child: Row(
+              children: [
+                Container(
+                  width: 105,
+                  decoration: BoxDecoration(
+                    color: itemColorBox,
+                    borderRadius: BorderRadius.circular(16),
+                    image: DecorationImage(
+                        alignment:Alignment.bottomCenter,
+                      image: AssetImage(imagePath))),
+                ),
+                //Чтобы предотвратить переполнения - Expanded если текст окажется длинный
+                Expanded(
+                    child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            name, //Используем извлеченный name
+                            style: const TextStyle(
+                              fontSize: 18,fontWeight: FontWeight.w600),
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          if (itemSpeciesLevel.isNotEmpty)
+                            Text(
+                              itemSpeciesLevel.length > 1
+                                  ? itemSpeciesLevel[1]
+                                  :itemSpeciesLevel[0],
+                            ),
+                          Spacer(),
+                          Row(
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                child: Container(
+                                height: 20,
+                                width: 20,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                          image: AssetImage(
+                                            'assets/images/priceRedSmolliconLable.png'),
+                                  )),
+                                ),
+                              ),
+                              Text(
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 16),
+                                itemPrice.toString(),
+                              ),
+
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                )
+              ],
+            ),
+          ),
+
+        );
 
 
+      },
+    separatorBuilder: (context, index) => const SizedBox(height: 12),
+    itemCount: itemsToDisplay.length);
 
 }
-
-
-
-
 
 }
