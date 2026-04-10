@@ -31,6 +31,6 @@ class CategoryModel {
       position: 1,
       vector: 'assets/images/pizza_simple.jpg',
       isSelected: false,));
-    return getCategories();
+    return categories;
   }
 }

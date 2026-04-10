@@ -44,7 +44,7 @@ class pizzaModel {
 
     ];
 
-    return getMainpizzaModel();
+    return mainListpizza;
   }
 
 

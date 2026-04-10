@@ -1,11 +1,13 @@
 
 import 'package:flutter/material.dart';
-import 'package:pizza_project/LocalData/models/CakesModel.dart';
+
 import 'package:pizza_project/LocalData/models/burgerModel.dart';
 import 'package:pizza_project/LocalData/models/category.dart';
 import 'package:pizza_project/LocalData/models/drinkModel.dart';
 import 'package:pizza_project/LocalData/models/pizzaModel.dart';
 import 'package:pizza_project/LocalData/pages/details.dart';
+
+import 'LocalData/models/cakesModel.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -19,11 +21,10 @@ class _HomePageState extends State<HomePage> {
   final List<Burgermodel> burgerData = Burgermodel.getMainListBurgers();
   final List<DrinkModel> drinkData = DrinkModel.getMainListJuices();
   final List<CategoryModel> categoryData = CategoryModel.getCategories();
-  final List<Cakesmodel> cakesData = Cakesmodel.getMainCakesModel();
+  final List<CakesModel> cakesData = CakesModel.getMainCakesModel();
   final List<pizzaModel> pizzaData = pizzaModel.getMainpizzaModel();
 
- // final List<TastyModel> cakesData = TastyModel.getCategories();
- // final List<PizzaModel> pizzaData = PizzaModel.getCategories();
+
 
   List<Object> itemsToDisplay = [];
   //Обьявляем лист для текущего демонстрирования
@@ -71,10 +72,10 @@ class _HomePageState extends State<HomePage> {
     currentCategoryList = List.from(drinkData);
     break;
       case 2:
-        currentCategoryList = List.from(pizzaData);
+        currentCategoryList = List.from(cakesData);
         break;
       case 3:
-        currentCategoryList = List.from(cakesData);
+        currentCategoryList = List.from(pizzaData);
         break;
 
       default:
@@ -104,8 +105,10 @@ class _HomePageState extends State<HomePage> {
         if(item is Burgermodel){
           searchText = item.name;
 
-        }else if (item is Cakesmodel) searchText = item.name;
+        }else
+          if (item is CakesModel) searchText = item.name;
         if (item is DrinkModel) searchText = item.d_name;
+        if (item is pizzaModel) searchText = item.name;
         return searchText.toLowerCase().contains(_searchQuery.toLowerCase());
       }).toList();
 
@@ -314,7 +317,7 @@ Widget snacks() {
           itemColorBox = universalModel.colorbox;
           itemSpeciesLevel = universalModel.speciesLevel;
           itemPrice = universalModel.price;
-        } else if (universalModel is Cakesmodel) {
+        } else if (universalModel is CakesModel) {
           name = universalModel.name;
           imagePath = universalModel.image;
           itemColorBox = universalModel.colorbox;
@@ -325,6 +328,12 @@ Widget snacks() {
           imagePath = universalModel.image;
           itemColorBox = Colors.grey;
           itemSpeciesLevel = ['', '', ''];
+          itemPrice = universalModel.price;
+        } else if (universalModel is pizzaModel) {
+          name = universalModel.name;
+          imagePath = universalModel.image;
+          itemColorBox = universalModel.colorbox;
+          itemSpeciesLevel = universalModel.speciesLevel;
           itemPrice = universalModel.price;
         }
 

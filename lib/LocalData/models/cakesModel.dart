@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Cakesmodel {
+class CakesModel {
   String name;
   String image;
   Color colorbox;
@@ -9,15 +9,15 @@ class Cakesmodel {
   double price;
 
 
-  Cakesmodel({
+  CakesModel({
     required this.name, required this.image, required this.colorbox,required this.speciesLevel,
     required this.description, required this.price
 
 });
-  static List<Cakesmodel> getMainCakesModel() {
-    List<Cakesmodel> mainListCakes = [];
+  static List<CakesModel> getMainCakesModel() {
+    List<CakesModel> mainListCakes = [];
     mainListCakes = [
-      Cakesmodel(
+      CakesModel(
           name: 'Cakes 88Chokolate',
           image: 'assets/images/cake88chokolate.jpg',
           colorbox: const Color(0xffcff5cf),
@@ -28,7 +28,7 @@ class Cakesmodel {
           price: 3.5
       ),
 
-      Cakesmodel(
+      CakesModel(
           name: 'Cakes 88lime',
           image: 'assets/images/cake88lime.jpg',
           colorbox: const Color(0xffcff5cf),
@@ -40,7 +40,7 @@ class Cakesmodel {
 
       ),
 
-      Cakesmodel(
+      CakesModel(
           name: 'Cakes 88yellow',
           image: 'assets/images/cake88yellow.jpg',
           colorbox: const Color(0xffcff5cf),
@@ -56,7 +56,7 @@ class Cakesmodel {
 
     ];
 
-    return getMainCakesModel();
+    return mainListCakes;
 
   }
 

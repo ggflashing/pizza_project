@@ -17,7 +17,7 @@ class DrinkModel {
       DrinkModel(
         d_name: 'Peppers burger',
         image: 'assets/images/pomelo_juice.png',
-        descpiption: 'much  very species'      'Peppers Burger Peppers '
+        descpiption: 'much  very species'   'Peppers Burger Peppers '
             'Burger Peppers Burger Peppers Burger'
 
             'Peppers Burger much  very species  much  very species',

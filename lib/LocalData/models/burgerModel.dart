@@ -17,7 +17,7 @@ class Burgermodel {
     mainListBurgers =[
       Burgermodel(
         name: 'Peppers burger',
-        image: 'assets/images/hot_peppers_burger.png',
+        image: 'assets/images/hot_pepper_burger.png',
         colorbox: const Color(0xffcff5cf),
         speciesLevel: ['much very peppers', 'Middle papers', 'no peppers'
         ],
